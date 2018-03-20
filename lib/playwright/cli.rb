@@ -1,9 +1,13 @@
-require "playwright/cli/version"
+require 'hanami/cli'
 
 module Playwright
-  module Cli
-    def self.echo *args
-      puts args
+  module CLI
+    require "playwright/cli/commands"
+    require "playwright/cli/version"
+
+    def self.call(*args)
+      Hanami::CLI.new(Commands).call(*args)
     end
+
   end
 end

@@ -1,5 +1,5 @@
 module Playwright
-  module Cli
+  module CLI
     VERSION = "0.0.0"
   end
 end

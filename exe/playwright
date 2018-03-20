@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
+require "hanami/cli"
 require "playwright/cli"
 
-Playwright::Cli.echo "hello"
+Playwright::CLI.call

@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require 'hanami/cli'
+
+module <%= klass_name %>
+  module CLI
+    module Commands
+      extend Hanami::CLI::Registry
+
+      class Echo < Hanami::CLI::Command
+        desc "Repeats text back to the user. This is an example."
+
+        argument :some_string, required: true, desc: 'The text you want echoed'
+
+        example [
+          "$ <%= script_name %> echo \"ruby is fun\"",
+          "#=> ruby is fun"
+        ]
+
+        def call(some_string:, **)
+          puts some_string
+        end
+
+      end
+
+      register 'echo', Echo
+
+    end
+  end
+end
+
+Hanami::CLI.new(<%= klass_name %>::CLI::Commands).call

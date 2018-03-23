@@ -7,23 +7,23 @@ module <%= klass_name %>
     module Commands
       extend Hanami::CLI::Registry
 
-      class Echo < Hanami::CLI::Command
-        desc "Repeats text back to the user. This is an example."
+      class Greet < Hanami::CLI::Command
+        desc "Says a greeting to the name given. This is an example."
 
-        argument :some_string, required: true, desc: 'The text you want echoed'
+        argument :name, required: true, desc: 'Whom shall I greet?'
 
         example [
-          "$ <%= script_name %> echo \"ruby is fun\"",
-          "#=> ruby is fun"
+          "$ <%= script_name %> greet \"Johnny Boy\"",
+          "#=> Why, hello Johnny Boy!"
         ]
 
-        def call(some_string:, **)
-          puts some_string
+        def call(name:, **)
+          puts "Why, hello #{name}"
         end
 
       end
 
-      register 'echo', Echo
+      register 'greet', Greet
 
     end
   end

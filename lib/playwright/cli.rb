@@ -3,6 +3,9 @@ require 'colorize'
 require 'fileutils'
 require 'erb'
 
+# TODO: Remove this
+require 'pry'
+
 module Playwright
   module CLI
     ROOT_PATH = File.expand_path('../..', File.dirname(__FILE__))
@@ -10,6 +13,7 @@ module Playwright
     PLAYS_BIN_PATH = File.join(PLAYS_PATH, 'bin')
     TEMPLATES_PATH = File.join(ROOT_PATH, 'lib', 'assets', 'templates')
 
+    require "playwright/cli/utils"
     require "playwright/cli/commands"
     require "playwright/cli/template"
     require "playwright/cli/version"

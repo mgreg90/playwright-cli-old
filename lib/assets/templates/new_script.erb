@@ -13,12 +13,11 @@ module <%= klass_name %>
         argument :name, required: true, desc: 'Whom shall I greet?'
 
         example [
-          "$ <%= script_name %> greet \"Johnny Boy\"",
-          "#=> Why, hello Johnny Boy!"
+          "\"Johnny Boy\" #=> Why, hello Johnny Boy!"
         ]
 
         def call(name:, **)
-          puts "Why, hello #{name}"
+          puts "Why, hello #{name}!"
         end
 
       end

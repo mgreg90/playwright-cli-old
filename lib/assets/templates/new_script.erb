@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
-require 'hanami/cli'
+require 'playwright/cli'
 
 module <%= klass_name %>
   module CLI
     module Commands
-      extend Hanami::CLI::Registry
+      extend Playwright::CLI::Registry
 
-      class Greet < Hanami::CLI::Command
+      class Greet < Playwright::CLI::Command
         desc "Says a greeting to the name given. This is an example."
 
         argument :name, required: true, desc: 'Whom shall I greet?'
@@ -28,4 +28,4 @@ module <%= klass_name %>
   end
 end
 
-Hanami::CLI.new(<%= klass_name %>::CLI::Commands).call
+Playwright::CLI.new(<%= klass_name %>::CLI::Commands).call

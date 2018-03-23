@@ -1,7 +1,7 @@
 require 'playwright/cli/utils/display'
 
 module Playwright
-  module CLI
+  class CLI < Hanami::CLI
     module Utils
       module Ask
 

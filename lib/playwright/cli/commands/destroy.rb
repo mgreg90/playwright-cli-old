@@ -1,7 +1,7 @@
 require 'playwright/cli/commands/destroy/command'
 
 module Playwright
-  module CLI
+  class CLI < Hanami::CLI
     module Commands
       extend Hanami::CLI::Registry
 

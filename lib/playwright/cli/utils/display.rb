@@ -1,5 +1,5 @@
 module Playwright
-  module CLI
+  class CLI < Hanami::CLI
     module Utils
       module Display
 

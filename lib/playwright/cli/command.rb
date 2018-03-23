@@ -1,5 +1,6 @@
 module Playwright
   class CLI < Hanami::CLI
-    VERSION = "0.1.1"
+    class Command < Hanamic::CLI::Command
+    end
   end
 end

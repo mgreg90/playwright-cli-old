@@ -1,5 +1,5 @@
 module Playwright
-  module CLI
+  class CLI < Hanami::CLI
     module Commands
       extend Hanami::CLI::Registry
 

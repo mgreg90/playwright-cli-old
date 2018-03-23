@@ -3,7 +3,7 @@ require 'playwright/cli/utils/display'
 require 'playwright/cli/utils/script_files'
 
 module Playwright
-  module CLI
+  class CLI < Hanami::CLI
     module Utils
     end
   end

@@ -1,5 +1,5 @@
 module Playwright
-  module CLI
+  class CLI < Hanami::CLI
     class Template
 
       attr_reader :script_name

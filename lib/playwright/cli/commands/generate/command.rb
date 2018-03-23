@@ -1,13 +1,16 @@
 module Playwright
-  module CLI
+  class CLI < Hanami::CLI
     module Commands
       extend Hanami::CLI::Registry
 
       class Generate < Hanami::CLI::Command
         class Command
+          include Utils::Display
+          include Utils::Ask
+          include Utils::ScriptFiles
+
           TEMPLATE_FILE = 'new_script.erb'.freeze
           PATH_BIN_DIR = File.join('/', 'usr', 'local', 'bin').freeze
-          DEFAULT_COLOR = :green
 
           def self.run(name)
             new(name).run
@@ -19,58 +22,62 @@ module Playwright
           end
 
           def run
-            create_script
-            set_permissions
-            symlink_into_path
-            open_editor
+            valid? do
+              create_script
+              set_permissions
+              symlink_into_path
+              open_editor
+            end
           end
-          
+
           private
 
-          def create_script
-            if File.exists?(script_path)
-              error "This script already exists!"
-            end
+          def valid?
+            validate!
+            yield
+          end
 
+          def validate!
+            if symlink_path_and_file? && !script_path_and_file?
+              display.error "There is already a script in your #{PATH_BIN_DIR} with that name!"
+            elsif script_path_and_file?
+              if ask.boolean_question "This playwright script already exists! Overwrite it?"
+                delete_playwright_script
+              else
+                display.abort "Aborting Operation."
+              end
+            end
+            true
+          end
+
+          def create_script
+            if script_path_and_file?
+              display.error "This script already exists!"
+            end
             FileUtils.mkdir_p(Playwright::CLI::PLAYS_BIN_PATH)
-            FileUtils.touch(script_path)
-            File.write(script_path, @template.render)
-            color_print "New File Created: #{script_path}"
+            FileUtils.touch(script_path_and_file)
+            File.write(script_path_and_file, @template.render)
+            display.color_print "New File Created: #{script_path_and_file}"
           end
-          
+
           def set_permissions
-            FileUtils.chmod "u+x", script_path
-            color_print "Executable Permissions Set!"
+            FileUtils.chmod "u+x", script_path_and_file
+            display.color_print "Executable Permissions Set!"
           end
-          
+
           def symlink_into_path
-            symlink_path = File.join(PATH_BIN_DIR, @name)
-            FileUtils.symlink(script_path, symlink_path)
+            delete_symlink_path_file
+            FileUtils.symlink(script_path_and_file, symlink_path_and_file)
+            display.color_print "Symlink Created!"
           end
 
           def open_editor
-            `$EDITOR #{script_path}`
+            `$EDITOR #{script_path_and_file}`
             if $?.success?
-              color_print "Opening script in your editor..."
+              display.color_print "Opening script in your editor..."
             else
-              error "Could not open Editor!"
+              display.error "Could not open Editor!"
             end
-          end
-
-          def script_path
-            File.join Playwright::CLI::PLAYS_BIN_PATH, @name
-          end
-
-          def error msg, msg2 = nil
-            color_print msg, color: :red
-            color_print "Action Cancelled.", color: :red
-            color_print msg2, color: :red if msg2
-            exit
-          end
-
-          def color_print str, method: :puts, color: DEFAULT_COLOR
-            str = str.send(color) if defined?(Colorize)
-            send(method, str)
           end
 
         end

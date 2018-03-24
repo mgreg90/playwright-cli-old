@@ -3,14 +3,10 @@ module Playwright
     module Commands
       extend Hanami::CLI::Registry
 
-      class Destroy < Hanami::CLI::Command
+      class Edit < Hanami::CLI::Command
         class Command
           include Utils::Display
           include Utils::ScriptFiles
-
-          TEMPLATE_FILE = 'new_script.erb'.freeze
-          PATH_BIN_DIR = File.join('/', 'usr', 'local', 'bin').freeze
-          DEFAULT_COLOR = :green
 
           def self.run(name)
             new(name).run
@@ -22,7 +18,7 @@ module Playwright
 
           def run
             valid? do
-              destroy_script
+              open_editor
             end
           end
 
@@ -34,14 +30,12 @@ module Playwright
           end
 
           def validate!
-            if !script_path_and_file?
+            if !symlink_path_and_file?
+              display.error "#{@name} does not exist!"
+            elsif symlink_path_and_file? && !script_path_and_file?
               display.error "#{@name} is not a playwright script!"
             end
-          end
-
-          def destroy_script
-            delete_playwright_script
-            display.color_print "Playwright script \"#{@name}\" destroyed!"
+            true
           end
 
         end

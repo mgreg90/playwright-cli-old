@@ -71,15 +71,6 @@ module Playwright
             display.color_print "Symlink Created!"
           end
 
-          def open_editor
-            `$EDITOR #{script_path_and_file}`
-            if $?.success?
-              display.color_print "Opening script in your editor..."
-            else
-              display.error "Could not open Editor!"
-            end
-          end
-
         end
       end
     end

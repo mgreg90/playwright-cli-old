@@ -34,6 +34,15 @@ module Playwright
           FileUtils.rm symlink_path_and_file if symlink_path_and_file?
         end
 
+        def open_editor
+          `$EDITOR #{script_path_and_file}`
+          if $?.success?
+            display.color_print "Opening `#{@name}` in your editor..."
+          else
+            display.error "Could not open Editor!"
+          end
+        end
+
       end
     end
   end

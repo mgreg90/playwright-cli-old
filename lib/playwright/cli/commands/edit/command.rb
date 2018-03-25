@@ -6,7 +6,7 @@ module Playwright
       class Edit < Hanami::CLI::Command
         class Command
           include Utils::Display
-          include Utils::ScriptFiles
+          include Utils::FileManager
 
           def self.run(name)
             new(name).run
@@ -17,25 +17,7 @@ module Playwright
           end
 
           def run
-            valid? do
-              open_editor
-            end
-          end
-
-          private
-
-          def valid?
-            validate!
-            yield
-          end
-
-          def validate!
-            if !symlink_path_and_file?
-              display.error "#{@name} does not exist!"
-            elsif symlink_path_and_file? && !script_path_and_file?
-              display.error "#{@name} is not a playwright script!"
-            end
-            true
+            file_manager.open_editor script_name: @name
           end
 
         end

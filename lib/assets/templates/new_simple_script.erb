@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+require 'playwright/cli'
+
+module <%= klass_name %>
+  module CLI
+    module Commands
+      extend Playwright::CLI::Registry
+
+      class Root < Playwright::CLI::Command
+        desc "Says a greeting to the name given. This is an example."
+
+        argument :name, required: true, desc: 'Whom shall I greet?'
+
+        example [
+          "\"Johnny Boy\" #=> Why, hello Johnny Boy!"
+        ]
+
+        def call(name:, **)
+          puts "Why, hello #{name}!"
+        end
+
+      end
+
+      register_root Root
+
+    end
+  end
+end
+
+Playwright::CLI.new(<%= klass_name %>::CLI::Commands).call

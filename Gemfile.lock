@@ -18,6 +18,7 @@ GEM
     hanami-utils (1.1.2)
       concurrent-ruby (~> 1.0)
       transproc (~> 1.0)
+    memfs (1.0.0)
     method_source (0.9.0)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -47,6 +48,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
+  memfs (~> 1.0)
   playwright-cli!
   pry (~> 0.9.0)
   pry-nav (~> 0.2.4)

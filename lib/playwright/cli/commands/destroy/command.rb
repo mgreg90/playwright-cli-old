@@ -6,7 +6,7 @@ module Playwright
       class Destroy < Hanami::CLI::Command
         class Command
           include Utils::Display
-          include Utils::ScriptFiles
+          include Utils::FileManager
 
           TEMPLATE_FILE = 'new_script.erb'.freeze
           PATH_BIN_DIR = File.join('/', 'usr', 'local', 'bin').freeze
@@ -21,27 +21,7 @@ module Playwright
           end
 
           def run
-            valid? do
-              destroy_script
-            end
-          end
-
-          private
-
-          def valid?
-            validate!
-            yield
-          end
-
-          def validate!
-            if !script_path_and_file?
-              display.error "#{@name} is not a playwright script!"
-            end
-          end
-
-          def destroy_script
-            delete_playwright_script
-            display.color_print "Playwright script \"#{@name}\" destroyed!"
+            file_manager.uninstall_script @name
           end
 
         end

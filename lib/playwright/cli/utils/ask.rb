@@ -18,7 +18,8 @@ module Playwright
 
           def boolean_question question
             display.color_print "#{question} [yn]", color: DEFAULT_COLOR
-            response = STDIN.gets.chomp.strip.downcase.to_sym
+            response = $stdin.gets
+            sanitized_response = response.chomp.strip.downcase.to_sym if response && response.length > 0
             boolean_response_map[response]
           end
 

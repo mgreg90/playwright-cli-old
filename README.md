@@ -1,34 +1,198 @@
 # Playwright::CLI
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/playwright/cli`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Playwright::CLI is a tool for quickly building (and hopefully soon sharing)
+Ruby command line applications. It's first goal is to provide a solid generator
+for building command line apps in Ruby. It's built on top of [Hanami::CLI](https://github.com/hanami/cli),
+so all of their documentation applies here as well.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'playwright-cli'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Install this gem with:
 
     $ gem install playwright-cli
 
 ## Usage
 
-TODO: Write usage instructions here
+### Check The Version
 
-## Development
+To check the version:
+```shell
+$ playwright -v #=> 0.1.4
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Create An App
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To create a simple command line app:
+
+    $ playwright generate my-script
+
+(aliases for `generate` include `g`, `new`)
+This will give you some boilerplate for your script and an example command that
+you should replace. The `#call` method is what is ultimately run.
+It will look something like this:
+
+```ruby
+#!/usr/bin/env ruby
+
+require 'playwright/cli'
+
+module MyScript
+  module CLI
+    module Commands
+      extend Playwright::CLI::Registry
+
+      class Root < Playwright::CLI::Command
+        desc "Says a greeting to the name given. This is an example."
+
+        argument :name, required: true, desc: 'Whom shall I greet?'
+
+        example [
+          "\"Johnny Boy\" #=> Why, hello Johnny Boy!"
+        ]
+
+        def call(name:, **)
+          puts "Why, hello #{name}!"
+        end
+
+      end
+
+      register_root Root
+
+    end
+  end
+end
+
+Playwright::CLI.new(MyScript::CLI::Commands).call
+
+```
+
+Most of this code is simply wrapping [Hanami::CLI](https://github.com/hanami/cli), so their documentation
+will be the best source of information for you in handling arguments and options.
+
+So far, only `#register_root` here is a playwright feature. It allows you to
+overwrite the root command. In this case that means:
+```shell
+$ my-script tom #=> Why, hello tom!
+```
+
+Hanami::CLI is built for more intricate command line apps, so playwright allows
+you to generate that as well.
+```shell
+$ playwright g my-script --type=expanded
+```
+This will give you a mostly similar main class:
+
+```ruby
+#!/usr/bin/env ruby
+
+require 'playwright/cli'
+require_relative 'lib/version'
+
+module MyScript
+  module CLI
+    module Commands
+      extend Playwright::CLI::Registry
+
+      class Greet < Playwright::CLI::Command
+        desc "Says a greeting to the name given. This is an example."
+
+        argument :name, required: true, desc: 'Whom shall I greet?'
+
+        example [
+          "\"Johnny Boy\" #=> Why, hello Johnny Boy!"
+        ]
+
+        def call(name:, **)
+          puts "Why, hello #{name}!"
+        end
+
+      end
+
+      register 'greet', Greet
+      register 'version', Version, aliases: ['v', '-v', '--version']
+
+    end
+  end
+end
+
+Playwright::CLI.new(MyScript::CLI::Commands).call
+```
+It will also give you a new file structure with an example (version) command:
+```
+  my-script
+    |- lib/
+    |   |- version.rb
+    |- my-script.rb
+```
+The main differences are that a new file lib/version is required and registered
+with aliases.
+
+Version class simply looks like this:
+```ruby
+module MyScript
+  module CLI
+
+    VERSION = "0.0.1"
+
+    module Commands
+      extend Playwright::CLI::Registry
+
+      class Version < Playwright::CLI::Command
+        desc "Responds with the version number."
+
+        example ["#=> #{VERSION}"]
+
+        def call(**)
+          puts VERSION
+        end
+
+      end
+
+    end
+  end
+end
+```
+
+This is useful for command line apps that will have multiple functions. This
+example would let you do:
+
+```shell
+$ my-script greet tom #=> Why, hello tom!
+$ my-script version #=> 0.0.1
+```
+
+
+### Edit An App
+
+Playwright::CLI uses your `$EDITOR` environment variable when choosing what
+editor to use when opening one of your playwright scripts.
+
+Use:
+
+`$ echo $EDITOR`
+
+To see what playwright will default to. You can update this in your ~/.bashrc
+(or ~/.zshrc if you are using zsh).
+
+In the future, I plan on allowing that to be a config you can set
+
+To edit an app:
+
+`$ playwright edit my-script`
+
+`e` can be used instead of `edit`.
+
+### Delete An App
+
+Deleting a playwright app is simply:
+
+```shell
+$ playwright destroy my-script
+```
+
+`delete` or `d` can be used instead of `destroy`
+This works for both simple and expanded apps. It cannot be used to delete or
+uninstall existing terminal commands, only playwright commands
 
 ## Contributing
 

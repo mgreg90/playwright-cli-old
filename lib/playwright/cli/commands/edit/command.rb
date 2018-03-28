@@ -3,14 +3,10 @@ module Playwright
     module Commands
       extend Hanami::CLI::Registry
 
-      class Destroy < Hanami::CLI::Command
+      class Edit < Hanami::CLI::Command
         class Command
           include Utils::Display
           include Utils::FileManager
-
-          TEMPLATE_FILE = 'new_script.erb'.freeze
-          PATH_BIN_DIR = File.join('/', 'usr', 'local', 'bin').freeze
-          DEFAULT_COLOR = :green
 
           def self.run(name)
             new(name).run
@@ -21,7 +17,7 @@ module Playwright
           end
 
           def run
-            file_manager.uninstall_script @name
+            file_manager.open_editor script_name: @name
           end
 
         end

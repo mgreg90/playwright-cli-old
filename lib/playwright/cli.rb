@@ -13,19 +13,28 @@ module Playwright
     PLAYS_BIN_PATH = File.join(PLAYS_PATH, 'bin')
     TEMPLATES_PATH = File.join(ROOT_PATH, 'lib', 'assets', 'templates')
 
+    require "playwright/cli/configuration"
     require "playwright/cli/utils"
     require "playwright/cli/commands"
     require "playwright/cli/registry"
     require "playwright/cli/template"
     require "playwright/cli/version"
 
+    def self.configuration
+      @configuration ||= Configuration.new
+    end
+
+    def self.configure
+      yield(configuration)
+    end
+
     def self.call(*args)
       new(Commands).call(*args)
     end
-    
+
     def call(arguments: ARGV, out: $stdout)
       result = commands.get(arguments)
-      
+
       if !result.found? && commands.has_root?
         result = commands.get_root(arguments)
         command, args = parse(result, out)

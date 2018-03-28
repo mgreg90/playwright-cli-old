@@ -9,13 +9,14 @@ module Playwright
         desc "Builds a template for a new playwright command."
 
         argument :name, required: true, desc: 'Script name'
+        option :type, default: 'simple', values: %w[ expanded simple ]
 
         example [
           "my-new-script\n# script will be called with my-new-script\n# class will be called MyNewScript"
         ]
 
-        def call(name: nil, **)
-          Command.run(name)
+        def call(name:, type:, **)
+          Command.run(name, type.to_sym)
         end
       end
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'playwright/cli'
+require_relative 'lib/version'
 
 module <%= klass_name %>
   module CLI
@@ -23,6 +24,7 @@ module <%= klass_name %>
       end
 
       register 'greet', Greet
+      register 'version', Version, aliases: ['v', '-v', '--version']
 
     end
   end

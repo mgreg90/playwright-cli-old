@@ -14,16 +14,17 @@ module Playwright
           TEMPLATE_FILE = 'new_script.erb'.freeze
           PATH_BIN_DIR = File.join('/', 'usr', 'local', 'bin').freeze
 
-          def self.run(name)
-            new(name).run
+          def self.run(name, type)
+            new(name, type).run
           end
 
-          def initialize(name)
+          def initialize(name, type)
             @name = name
+            @type = type
           end
 
           def run
-            file_manager.install_script script_name: @name
+            file_manager.install_script script_name: @name, type: @type
           end
 
         end

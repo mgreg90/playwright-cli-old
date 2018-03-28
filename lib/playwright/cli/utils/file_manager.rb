@@ -16,8 +16,6 @@ module Playwright
           include Display
           include Ask
 
-          VALID_TYPES = [Template::SIMPLE_TYPE, Template::COMPLEX_TYPE]
-
           attr_reader :script_name, :type
 
           def initialize script_name: nil, type: nil
@@ -25,8 +23,7 @@ module Playwright
             @type = type
           end
 
-          def install_script script_name:, type: Template::SIMPLE_TYPE
-            raise ArgumentError, "Invalid Type!" unless VALID_TYPES.include?(type)
+          def install_script script_name:, type:
             @script_name = script_name
             @type = type
             create_script_files
@@ -43,7 +40,7 @@ module Playwright
 
           def open_editor script_name: nil
             @script_name ||= script_name
-            `$EDITOR #{root_dir}`
+            %x[$EDITOR #{root_dir}]
             if $?.success?
               display.color_print "Opening `#{@script_name}` in your editor..."
             else
@@ -96,7 +93,7 @@ module Playwright
 # ==============================================================================
 
           def template
-            @template ||= Template.new(name: script_name_rb, out_file: executable_file)
+            @template ||= Template.new(name: script_name_rb, out_file: executable_file, type: type)
           end
 
 # ==============================================================================
@@ -127,6 +124,14 @@ module Playwright
             File.symlink? symlink_file
           end
 
+          def script_lib_dir
+            File.join root_dir, 'lib'
+          end
+
+          def version_subcommand_file
+            File.join script_lib_dir, 'version.rb'
+          end
+
   # ==============================================================================
   # CREATE METHODS
   # ==============================================================================
@@ -138,6 +143,12 @@ module Playwright
             display.color_print "New Directory Created: #{root_dir}"
             FileUtils.touch executable_file
             display.color_print "New File Created: #{executable_file}"
+            create_expanded_files if type == :expanded
+          end
+
+          def create_expanded_files
+            FileUtils.mkdir_p script_lib_dir
+            FileUtils.touch version_subcommand_file
           end
 
           def set_permissions
@@ -147,6 +158,15 @@ module Playwright
 
           def write_template
             template.render
+            if type == Template::EXPANDED_TYPE
+              new_template = Template.new(
+                name: 'version.rb',
+                out_file: version_subcommand_file,
+                type: Template::SUBCOMMAND_TYPE,
+                klass_name: template.klass_name
+              )
+              new_template.render
+            end
           end
 
           def create_symlink

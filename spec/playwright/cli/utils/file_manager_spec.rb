@@ -127,6 +127,16 @@ RSpec.describe Playwright::CLI::Utils::FileManager::FileManager, memfs: true do
       end
     end
 
+    describe "#create_expanded_files" do
+      before { subject.send :create_expanded_files }
+      it "creates the lib directory" do
+        expect(Dir.exists?('Users/fakeuser/.playwright/plays/my-script/lib')).to be true
+      end
+      it "creates an example subcommand" do
+        expect(File.exists?('Users/fakeuser/.playwright/plays/my-script/lib/version.rb')).to be true
+      end
+    end
+
     describe "#create_symlink" do
       before do
         subject.send :create_script_files

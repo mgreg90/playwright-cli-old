@@ -13,11 +13,12 @@ module Playwright
     PLAYS_BIN_PATH = File.join(PLAYS_PATH, 'bin')
     TEMPLATES_PATH = File.join(ROOT_PATH, 'lib', 'assets', 'templates')
 
-    require "playwright/cli/configuration"
-    require "playwright/cli/utils"
+    require "playwright/cli/command"
     require "playwright/cli/commands"
+    require "playwright/cli/configuration"
     require "playwright/cli/registry"
     require "playwright/cli/template"
+    require "playwright/cli/utils"
     require "playwright/cli/version"
 
     def self.configuration

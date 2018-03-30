@@ -22,6 +22,7 @@ module Playwright
           end
 
           def open_editor path:, name: Pathname.new(path).base
+            display.error "#{name} is not a Playwright script!" unless Dir.exists?(path) || File.exists?(path)
             if %x[ $EDITOR #{path} ]
               display.print "Opening #{name} in your default editor..."
             else

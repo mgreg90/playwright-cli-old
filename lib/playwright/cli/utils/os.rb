@@ -1,3 +1,4 @@
+require 'playwright/cli/utils/util'
 require 'playwright/cli/utils/display'
 
 module Playwright
@@ -9,7 +10,7 @@ module Playwright
           @os ||= OS.new
         end
 
-        class OS
+        class OS < Util
           include Display
 
           def open_url url:, name: URI(url).host

@@ -1,3 +1,4 @@
+require 'playwright/cli/utils/util'
 module Playwright
   class CLI < Hanami::CLI
     module Utils
@@ -7,7 +8,7 @@ module Playwright
           @display ||= Display.new
         end
 
-        class Display
+        class Display < Util
 
           InvalidPrintMethod = Class.new StandardError
 

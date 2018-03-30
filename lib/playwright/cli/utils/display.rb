@@ -8,7 +8,7 @@ module Playwright
         end
 
         class Display
-          
+
           InvalidPrintMethod = Class.new StandardError
 
           VALID_PRINT_METHODS = [:p, :puts, :print]
@@ -17,19 +17,19 @@ module Playwright
           ERROR_COLOR = :red
 
           def error msg, msg2 = nil
-            color_print msg, color: :red
-            color_print "Action Cancelled.", color: ERROR_COLOR
-            color_print msg2, color: ERROR_COLOR if msg2
-            exit
+            print msg, color: :red
+            print "Action Cancelled.", color: ERROR_COLOR
+            print msg2, color: ERROR_COLOR if msg2
+            exit 1
           end
 
           def abort msg = nil
-            color_print msg, color: WARNING_COLOR if msg
-            color_print "Action Cancelled.", color: WARNING_COLOR
-            exit
+            print msg, color: WARNING_COLOR if msg
+            print "Action Cancelled.", color: WARNING_COLOR
+            exit 1
           end
 
-          def color_print msg, method: :puts, color: DEFAULT_COLOR
+          def print msg, method: :puts, color: DEFAULT_COLOR
             validate_print_method!(method)
             msg = msg.send(color) if defined?(Colorize)
             send(method, msg)

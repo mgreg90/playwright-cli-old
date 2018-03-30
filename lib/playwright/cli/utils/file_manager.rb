@@ -1,5 +1,6 @@
 require 'playwright/cli/utils/ask'
 require 'playwright/cli/utils/display'
+require 'playwright/cli/utils/os'
 require 'playwright/cli/configuration'
 require 'playwright/cli/template'
 
@@ -40,12 +41,7 @@ module Playwright
 
           def open_editor script_name: nil
             @script_name ||= script_name
-            %x[$EDITOR #{root_dir}]
-            if $?.success?
-              display.color_print "Opening `#{@script_name}` in your editor..."
-            else
-              display.error "Could not open Editor!"
-            end
+            os.open_editor name: @script_name, path: root_dir
           end
 
           def script_name_rb
@@ -140,9 +136,9 @@ module Playwright
             validate_before_create_script_files!
             self.class.create_file_structure
             FileUtils.mkdir_p root_dir
-            display.color_print "New Directory Created: #{root_dir}"
+            display.print "New Directory Created: #{root_dir}"
             FileUtils.touch executable_file
-            display.color_print "New File Created: #{executable_file}"
+            display.print "New File Created: #{executable_file}"
             create_expanded_files if type == :expanded
           end
 
@@ -153,7 +149,7 @@ module Playwright
 
           def set_permissions
             FileUtils.chmod "u+x", executable_file
-            display.color_print "Executable Permissions Set: #{executable_file}"
+            display.print "Executable Permissions Set: #{executable_file}"
           end
 
           def write_template
@@ -171,7 +167,7 @@ module Playwright
 
           def create_symlink
             FileUtils.symlink(executable_file, symlink_file)
-            display.color_print "New Symlink Created: #{symlink_file} from #{executable_file}"
+            display.print "New Symlink Created: #{symlink_file} from #{executable_file}"
           end
 
           def validate_before_create_script_files!
@@ -194,7 +190,7 @@ module Playwright
             validate_before_delete_script_files!
             FileUtils.rm_rf root_dir
             FileUtils.rm symlink_file
-            display.color_print "Playwright script '#{script_name}' destroyed!"
+            display.print "Playwright script '#{script_name}' destroyed!"
           end
 
           def validate_before_delete_script_files!

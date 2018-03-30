@@ -17,10 +17,20 @@ module Playwright
           FALSE_RESPONSE = :n
 
           def boolean_question question
-            display.color_print "#{question} [yn]", color: DEFAULT_COLOR
+            display.print "#{question} [yn]", color: DEFAULT_COLOR
             response = $stdin.gets
             sanitized_response = response.chomp.strip.downcase.to_sym if response && response.length > 0
             boolean_response_map[response]
+          end
+
+          def url_question question
+            display.print question, color: DEFAULT_COLOR
+            response = $stdin.gets
+            if response =~ URI::regexp
+              response
+            else
+              display.error "Invalid URL!"
+            end
           end
 
           private

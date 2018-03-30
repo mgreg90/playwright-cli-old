@@ -12,3 +12,5 @@
 /plays/
 .ruby-version
 .commit-msg
+*.gem
+.trello

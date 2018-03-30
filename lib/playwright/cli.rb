@@ -2,6 +2,9 @@ require 'hanami/cli'
 require 'colorize'
 require 'fileutils'
 require 'erb'
+require 'os'
+require 'uri'
+require 'pathname'
 
 # TODO: Remove this
 require 'pry'

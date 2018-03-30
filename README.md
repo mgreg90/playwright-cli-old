@@ -161,6 +161,57 @@ $ my-script greet tom #=> Why, hello tom!
 $ my-script version #=> 0.0.1
 ```
 
+### Helpers
+
+Inside of your command, you have access to a few helper objects to make
+interactions easier. You can see any of your helpers actions by calling the
+`#actions` method on it.
+
+#### Display
+
+The Display helper has 3 actions, `print`, `error`, and `abort`. Each takes a
+message as the first argument and can optionally take a color. `error` and
+`abort` also exit the program.
+
+`abort` should be used over `error` only if the user has triggered the exit.
+A good example would be if you ask a user, "File already exists? Overwrite it?
+[yn]" and they choose 'n'
+
+```ruby
+class Greet < Playwright::CLI::Command
+  def call(**)
+    display.print "Hello!", color: :blue
+  end
+end
+```
+
+#### Ask
+
+The Ask helper has 3 actions, `question`, `boolean_question`, and
+`url_question`. Each takes a message as the only argument. `boolean_question`
+and `url_question` validate the response. `question` does not.
+
+```ruby
+class Greet < Playwright::CLI::Command
+  def call(**)
+    ask.boolean_question "What's your name?" #=> "What's your name? [yn]"
+  end
+end
+```
+
+#### OS
+
+The OS helper has 2 actions, `open_url` and `open_editor`. `open_url` takes a
+url and an optional name. `open_editor` takes a path and an optional name.
+
+```ruby
+class Greet < Playwright::CLI::Command
+  def call(**)
+    os.open_url url: 'http://google.com', name: 'google'
+    os.open_editor path: Dir.pwd, name: 'working directory'
+  end
+end
+```
 
 ### Edit An App
 

@@ -123,6 +123,9 @@ It will also give you a new file structure with an example (version) command:
     |- lib/
     |   |- version.rb
     |- my-script.rb
+    |- .git/
+    |- .gitignore
+    |- README.md
 ```
 The main differences are that a new file lib/version is required and registered
 with aliases.
@@ -247,7 +250,7 @@ uninstall existing terminal commands, only playwright commands
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/playwright-cli.
+Bug reports and pull requests are welcome on GitHub at https://github.com/mgreg90/playwright-cli.
 
 ## License
 

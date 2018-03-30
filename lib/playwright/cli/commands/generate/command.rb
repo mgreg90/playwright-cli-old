@@ -12,7 +12,7 @@ module Playwright
           include Utils::FileManager
 
           TEMPLATE_FILE = 'new_script.erb'.freeze
-          PATH_BIN_DIR = File.join('/', 'usr', 'local', 'bin').freeze
+          PATH_BIN_DIR = Pathname.new(File.join('/', 'usr', 'local', 'bin'))
 
           def self.run(name, type)
             new(name, type).run

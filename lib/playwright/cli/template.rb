@@ -12,17 +12,20 @@ module Playwright
       EXPANDED_TEMPLATE = 'expanded_script_template.erb'
       SUBCOMMAND_TYPE = :subcommand
       SUBCOMMAND_TEMPLATE = 'version_subcommand_template.erb'
+      README_TYPE = :readme
+      README_TEMPLATE = 'script_readme_template.erb'
 
       TEMPLATE_MAP = {
         SIMPLE_TYPE => SIMPLE_TEMPLATE,
         EXPANDED_TYPE => EXPANDED_TEMPLATE,
-        SUBCOMMAND_TYPE => SUBCOMMAND_TEMPLATE
+        SUBCOMMAND_TYPE => SUBCOMMAND_TEMPLATE,
+        README_TYPE => README_TEMPLATE
       }
 
       def initialize(name:, out_file:, type: SIMPLE_TYPE, klass_name: nil)
         @script_name = name
         @out_file = out_file
-        @template_file = File.join(Playwright::CLI::TEMPLATES_PATH, TEMPLATE_MAP[type])
+        @template_file = Playwright::CLI::TEMPLATES_PATH.join TEMPLATE_MAP[type]
         @klass_name = klass_name
       end
 

@@ -18,7 +18,7 @@ module Playwright
           FALSE_RESPONSE = :n
 
           def boolean_question user_question
-            response = question "#{user question} [yn]"
+            response = question "#{user_question} [yn]"
             sanitized_response = response.chomp.strip.downcase.to_sym if response && response.length > 0
             boolean_response_map[response]
           end

@@ -16,8 +16,11 @@ module Playwright
         class FileManager
           include Display
           include Ask
+          include OS
 
           attr_reader :script_name, :type
+
+          GITIGNORE = []
 
           def initialize script_name: nil, type: nil
             @script_name = script_name
@@ -32,6 +35,9 @@ module Playwright
             write_template
             create_symlink
             open_editor
+            git_init
+            create_gitignore
+            create_readme
           end
 
           def uninstall_script script_name
@@ -51,23 +57,23 @@ module Playwright
           private
 
           def self.playwright_parent_dir
-            Playwright::CLI.configuration.home_dir
+            Pathname.new(Playwright::CLI.configuration.home_dir)
           end
 
           def self.executable_path_dir
-            Playwright::CLI.configuration.executable_path_dir
+            Pathname.new(Playwright::CLI.configuration.executable_path_dir)
           end
 
           def self.dot_playwright_dir
-            File.join playwright_parent_dir, '.playwright'
+            playwright_parent_dir.join '.playwright'
           end
 
           def self.plays_dir
-            File.join dot_playwright_dir, 'plays'
+            dot_playwright_dir.join 'plays'
           end
 
           def self.config_file
-            File.join dot_playwright_dir, 'config.rb'
+            dot_playwright_dir.join 'config.rb'
           end
 
           def self.create_file_structure
@@ -97,7 +103,7 @@ module Playwright
 # ==============================================================================
 
           def root_dir
-            File.join self.class.plays_dir, script_name
+            self.class.plays_dir.join script_name
           end
 
           def root_dir_exists?
@@ -105,7 +111,7 @@ module Playwright
           end
 
           def executable_file
-            File.join root_dir, script_name_rb
+            root_dir.join script_name_rb
           end
 
           def executable_file_exists?
@@ -113,7 +119,7 @@ module Playwright
           end
 
           def symlink_file
-            File.join self.class.executable_path_dir, script_name
+            self.class.executable_path_dir.join script_name
           end
 
           def symlink_file_exists?
@@ -121,11 +127,11 @@ module Playwright
           end
 
           def script_lib_dir
-            File.join root_dir, 'lib'
+            root_dir.join 'lib'
           end
 
           def version_subcommand_file
-            File.join script_lib_dir, 'version.rb'
+            script_lib_dir.join 'version.rb'
           end
 
   # ==============================================================================
@@ -180,6 +186,28 @@ module Playwright
                 display.abort "Aborting Operation."
               end
             end
+          end
+
+          def git_init
+            git = Git.init root_dir.to_s
+            git.add all: true
+            git.commit('initial commit')
+          end
+
+          def create_gitignore
+            File.open root_dir.join(".gitignore"), "w+" do |file|
+              file.write GITIGNORE.join("\n")
+            end
+          end
+
+          def create_readme
+            FileUtils.touch root_dir.join("README.md")
+            new_template = Template.new(
+              name: script_name,
+              out_file: root_dir.join("README.md"),
+              type: Template::README_TYPE
+            )
+            new_template.render
           end
 
   # ==============================================================================

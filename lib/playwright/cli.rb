@@ -1,5 +1,7 @@
 require 'hanami/cli'
 require 'colorize'
+require 'git'
+
 require 'fileutils'
 require 'erb'
 require 'os'
@@ -11,10 +13,10 @@ require 'pry'
 
 module Playwright
   class CLI < Hanami::CLI
-    ROOT_PATH = File.expand_path('../..', File.dirname(__FILE__))
-    PLAYS_PATH = File.join(ROOT_PATH, 'plays')
-    PLAYS_BIN_PATH = File.join(PLAYS_PATH, 'bin')
-    TEMPLATES_PATH = File.join(ROOT_PATH, 'lib', 'assets', 'templates')
+    ROOT_PATH = Pathname.new(File.expand_path('../..', File.dirname(__FILE__)))
+    PLAYS_PATH = ROOT_PATH.join 'plays'
+    PLAYS_BIN_PATH = PLAYS_PATH.join 'bin'
+    TEMPLATES_PATH = ROOT_PATH.join 'lib', 'assets', 'templates'
 
     require "playwright/cli/command"
     require "playwright/cli/commands"

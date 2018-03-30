@@ -1,0 +1,28 @@
+# <%= script_name %>
+
+<%= script_name %> is a [playwright-cli](https://github.com/mgreg90/playwright-cli) script.
+ADD DESCRIPTION HERE
+
+## Installation
+
+This script relies on the playwright-cli gem. Sharing features are still
+in development for playwright, so for now, you'll need to run the following
+commands to install it.
+
+```shell
+$ gem install playwright-cli
+$ mkdir -p "$HOME/.playwright/plays"
+$ cd "$HOME/.playwright/plays" && git clone git@github.com:[GIT_USERNAME]/<%= script_name.downcase %>.git
+$ ln -s "$HOME/.playwright/plays/<%= script_name.downcase %>/<%= script_name.downcase %>.rb" "/usr/local/bin/<%= script_name.downcase %>"
+```
+
+In the future, expect a `$ playwright get <%= script_name.downcase %>` command to exist.
+
+## Usage
+
+EXPLAIN USAGE HERE.
+
+## Thanks!
+
+Thanks for checking out my script. If you're interested in ruby scripting,
+consider creating a [playwright-cli](https://github.com/mgreg90/playwright-cli) script of your own!

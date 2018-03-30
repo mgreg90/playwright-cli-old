@@ -8,8 +8,8 @@ module Playwright
       DEFAULT_EXECUTABLE_PATH_DIR = File.join('/', 'usr', 'local', 'bin')
 
       def initialize
-        @home_dir = DEFAULT_HOME
-        @executable_path_dir = DEFAULT_EXECUTABLE_PATH_DIR
+        @home_dir = Pathname.new DEFAULT_HOME
+        @executable_path_dir = Pathname.new DEFAULT_EXECUTABLE_PATH_DIR
       end
 
     end

@@ -54,6 +54,13 @@ module Playwright
             "#{script_name}.rb"
           end
 
+          def list_scripts
+            Dir.new(self.class.plays_dir).select do |file_or_dir|
+              Dir.exists?(self.class.plays_dir.join(file_or_dir)) &&
+                !['..', '.'].include?(file_or_dir)
+            end
+          end
+
           private
 
           def self.playwright_parent_dir

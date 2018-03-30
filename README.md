@@ -223,7 +223,9 @@ editor to use when opening one of your playwright scripts.
 
 Use:
 
-`$ echo $EDITOR`
+```shell
+$ echo $EDITOR
+```
 
 To see what playwright will default to. You can update this in your ~/.bashrc
 (or ~/.zshrc if you are using zsh).
@@ -232,9 +234,21 @@ In the future, I plan on allowing that to be a config you can set
 
 To edit an app:
 
-`$ playwright edit my-script`
+```shell
+$ playwright edit my-script
+```
 
 `e` can be used instead of `edit`.
+
+### List Apps
+
+To see all Playwright apps, use:
+
+```shell
+$ playwright list
+```
+
+`l`, `-l`, `--list` can be used instead of `list`.
 
 ### Delete An App
 

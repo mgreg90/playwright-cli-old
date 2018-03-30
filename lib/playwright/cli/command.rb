@@ -5,6 +5,7 @@ module Playwright
     class Command < Hanami::CLI::Command
       include CLI::Utils::Ask
       include CLI::Utils::Display
+      include CLI::Utils::FileManager
       include CLI::Utils::OS
     end
   end

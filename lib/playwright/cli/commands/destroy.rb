@@ -6,7 +6,7 @@ module Playwright
       extend Hanami::CLI::Registry
 
       class Destroy < Hanami::CLI::Command
-        desc "Delets a playwright command."
+        desc "Deletes a playwright command."
 
         argument :name, required: true, desc: 'Script name'
 

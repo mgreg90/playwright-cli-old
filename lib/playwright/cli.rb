@@ -8,9 +8,6 @@ require 'os'
 require 'uri'
 require 'pathname'
 
-# TODO: Remove this
-require 'pry'
-
 module Playwright
   class CLI < Hanami::CLI
     ROOT_PATH = Pathname.new(File.expand_path('../..', File.dirname(__FILE__)))

@@ -1,13 +1,12 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require "hanami/cli"
 require "playwright/cli"
 require "pry"
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
 
-@cli = Hanami::CLI.new(Playwright::CLI::Commands)
+@cli = Playwright::CLI.new(Playwright::CLI::Commands)
 
 Pry.start

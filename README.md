@@ -17,7 +17,7 @@ Install this gem with:
 
 To check the version:
 ```shell
-$ playwright -v #=> 0.1.4
+$ playwright -v #=> 0.1.14
 ```
 
 ### Create An App
@@ -34,7 +34,11 @@ It will look something like this:
 ```ruby
 #!/usr/bin/env ruby
 
-require 'playwright/cli'
+require 'bundler/inline'
+gemfile do
+  source 'https://rubygems.org'
+  gem 'playwright-cli', require: 'playwright/cli'
+end
 
 module MyScript
   module CLI
@@ -66,14 +70,19 @@ Playwright::CLI.new(MyScript::CLI::Commands).call
 
 ```
 
-Most of this code is simply wrapping [Hanami::CLI](https://github.com/hanami/cli), so their documentation
-will be the best source of information for you in handling arguments and options.
-
-So far, only `#register_root` here is a playwright feature. It allows you to
-overwrite the root command. In this case that means:
 ```shell
 $ my-script tom #=> Why, hello tom!
 ```
+Most of this code is simply wrapping [Hanami::CLI](https://github.com/hanami/cli), so their documentation
+will be the best source of information for you in handling arguments and options.
+
+You can list any gems you want inside the gemfile block as you would any gemfile.
+You won't have to worry about running `bundle`.
+
+All commands must implement a `#call` method and must be registered, either using
+`#register` (as in the example below) or `#register_root`. `#register_root` is
+for registering the base command. All subcommands are registered with `#register`,
+as in the example below.
 
 Hanami::CLI is built for more intricate command line apps, so playwright allows
 you to generate that as well.
@@ -85,7 +94,12 @@ This will give you a mostly similar main class:
 ```ruby
 #!/usr/bin/env ruby
 
-require 'playwright/cli'
+require 'bundler/inline'
+gemfile do
+  source 'https://rubygems.org'
+  gem 'playwright-cli', require: 'playwright/cli'
+end
+
 require_relative 'lib/version'
 
 module MyScript

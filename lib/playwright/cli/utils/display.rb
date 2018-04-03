@@ -18,7 +18,7 @@ module Playwright
           ERROR_COLOR = :red
 
           def error msg, msg2 = nil
-            print msg, color: :red
+            print msg, color: ERROR_COLOR
             print "Action Cancelled.", color: ERROR_COLOR
             print msg2, color: ERROR_COLOR if msg2
             exit 1

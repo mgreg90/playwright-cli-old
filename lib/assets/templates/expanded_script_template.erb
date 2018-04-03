@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 
-require 'playwright/cli'
+require 'bundler/inline'
+gemfile do
+  source 'https://rubygems.org'
+  gem 'playwright-cli', require: 'playwright/cli'
+end
+
 require_relative 'lib/version'
 
 module <%= klass_name %>

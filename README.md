@@ -17,7 +17,7 @@ Install this gem with:
 
 To check the version:
 ```shell
-$ playwright -v #=> 0.1.13
+$ playwright -v #=> 0.1.14
 ```
 
 ### Create An App

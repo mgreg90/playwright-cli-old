@@ -1,7 +1,9 @@
+require 'playwright/cli/registry'
+
 module Playwright
   class CLI < Hanami::CLI
     module Commands
-      extend Hanami::CLI::Registry
+      extend Playwright::CLI::Registry
       require 'playwright/cli/commands/destroy'
       require 'playwright/cli/commands/edit'
       require 'playwright/cli/commands/generate'

@@ -34,10 +34,10 @@ module Playwright
             set_permissions
             write_template
             create_symlink
-            open_editor
-            git_init
             create_gitignore
             create_readme
+            git_init
+            open_editor
           end
 
           def uninstall_script script_name

@@ -5,11 +5,30 @@ Ruby command line applications. It's first goal is to provide a solid generator
 for building command line apps in Ruby. It's built on top of [Hanami::CLI](https://github.com/hanami/cli),
 so all of their documentation applies here as well.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Check The Version](#check-the-version)
+- [Create An App](#create-an-app)
+- [Helpers](#helpers)
+  - [Display](#display)
+  - [Ask](#ask)
+  - [OS](#os)
+- [Arguments & Options](#arguments-&-options)
+  - [Validations](#validations)
+- [Edit An App](#edit-an-app)
+- [List Apps](#list-apps)
+- [Delete An App](#delete-an-app)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Installation
 
 Install this gem with:
-
+```shell
     $ gem install playwright-cli
+```
 
 ## Usage
 
@@ -17,7 +36,7 @@ Install this gem with:
 
 To check the version:
 ```shell
-$ playwright -v #=> 0.1.14
+  $ playwright -v #=> 0.1.16
 ```
 
 ### Create An App
@@ -32,46 +51,46 @@ you should replace. The `#call` method is what is ultimately run.
 It will look something like this:
 
 ```ruby
-#!/usr/bin/env ruby
+  #!/usr/bin/env ruby
 
-require 'bundler/inline'
-gemfile do
-  source 'https://rubygems.org'
-  gem 'playwright-cli', require: 'playwright/cli'
-end
+  require 'bundler/inline'
+  gemfile do
+    source 'https://rubygems.org'
+    gem 'playwright-cli', require: 'playwright/cli'
+  end
 
-module MyScript
-  module CLI
-    module Commands
-      extend Playwright::CLI::Registry
+  module MyScript
+    module CLI
+      module Commands
+        extend Playwright::CLI::Registry
 
-      class Root < Playwright::CLI::Command
-        desc "Says a greeting to the name given. This is an example."
+        class Root < Playwright::CLI::Command
+          desc "Says a greeting to the name given. This is an example."
 
-        argument :name, required: true, desc: 'Whom shall I greet?'
+          argument :name, required: true, desc: 'Whom shall I greet?'
 
-        example [
-          "\"Johnny Boy\" #=> Why, hello Johnny Boy!"
-        ]
+          example [
+            "\"Johnny Boy\" #=> Why, hello Johnny Boy!"
+          ]
 
-        def call(name:, **)
-          puts "Why, hello #{name}!"
+          def call(name:, **)
+            display.print "Why, hello #{name}!"
+          end
+
         end
 
+        register_root Root
+
       end
-
-      register_root Root
-
     end
   end
-end
 
-Playwright::CLI.new(MyScript::CLI::Commands).call
+  Playwright::CLI.new(MyScript::CLI::Commands).call
 
 ```
 
 ```shell
-$ my-script tom #=> Why, hello tom!
+  $ my-script tom #=> Why, hello tom!
 ```
 Most of this code is simply wrapping [Hanami::CLI](https://github.com/hanami/cli), so their documentation
 will be the best source of information for you in handling arguments and options.
@@ -87,49 +106,49 @@ as in the example below.
 Hanami::CLI is built for more intricate command line apps, so playwright allows
 you to generate that as well.
 ```shell
-$ playwright g my-script --type=expanded
+  $ playwright g my-script --type=expanded
 ```
 This will give you a mostly similar main class:
 
 ```ruby
-#!/usr/bin/env ruby
+  #!/usr/bin/env ruby
 
-require 'bundler/inline'
-gemfile do
-  source 'https://rubygems.org'
-  gem 'playwright-cli', require: 'playwright/cli'
-end
+  require 'bundler/inline'
+  gemfile do
+    source 'https://rubygems.org'
+    gem 'playwright-cli', require: 'playwright/cli'
+  end
 
-require_relative 'lib/version'
+  require_relative 'lib/version'
 
-module MyScript
-  module CLI
-    module Commands
-      extend Playwright::CLI::Registry
+  module MyScript
+    module CLI
+      module Commands
+        extend Playwright::CLI::Registry
 
-      class Greet < Playwright::CLI::Command
-        desc "Says a greeting to the name given. This is an example."
+        class Greet < Playwright::CLI::Command
+          desc "Says a greeting to the name given. This is an example."
 
-        argument :name, required: true, desc: 'Whom shall I greet?'
+          argument :name, required: true, desc: 'Whom shall I greet?'
 
-        example [
-          "\"Johnny Boy\" #=> Why, hello Johnny Boy!"
-        ]
+          example [
+            "\"Johnny Boy\" #=> Why, hello Johnny Boy!"
+          ]
 
-        def call(name:, **)
-          puts "Why, hello #{name}!"
+          def call(name:, **)
+            display.print "Why, hello #{name}!"
+          end
+
         end
 
+        register 'greet', Greet
+        register 'version', Version, aliases: ['v', '-v', '--version']
+
       end
-
-      register 'greet', Greet
-      register 'version', Version, aliases: ['v', '-v', '--version']
-
     end
   end
-end
 
-Playwright::CLI.new(MyScript::CLI::Commands).call
+  Playwright::CLI.new(MyScript::CLI::Commands).call
 ```
 It will also give you a new file structure with an example (version) command:
 ```
@@ -146,36 +165,36 @@ with aliases.
 
 Version class simply looks like this:
 ```ruby
-module MyScript
-  module CLI
+  module MyScript
+    module CLI
 
-    VERSION = "0.0.1"
+      VERSION = "0.0.1"
 
-    module Commands
-      extend Playwright::CLI::Registry
+      module Commands
+        extend Playwright::CLI::Registry
 
-      class Version < Playwright::CLI::Command
-        desc "Responds with the version number."
+        class Version < Playwright::CLI::Command
+          desc "Responds with the version number."
 
-        example ["#=> #{VERSION}"]
+          example ["#=> #{VERSION}"]
 
-        def call(**)
-          puts VERSION
+          def call(**)
+            display.print VERSION
+          end
+
         end
 
       end
-
     end
   end
-end
 ```
 
 This is useful for command line apps that will have multiple functions. This
 example would let you do:
 
 ```shell
-$ my-script greet tom #=> Why, hello tom!
-$ my-script version #=> 0.0.1
+  $ my-script greet tom #=> Why, hello tom!
+  $ my-script version #=> 0.0.1
 ```
 
 ### Helpers
@@ -195,11 +214,11 @@ A good example would be if you ask a user, "File already exists? Overwrite it?
 [yn]" and they choose 'n'
 
 ```ruby
-class Greet < Playwright::CLI::Command
-  def call(**)
-    display.print "Hello!", color: :blue
+  class Greet < Playwright::CLI::Command
+    def call(**)
+      display.print "Hello!", color: :blue
+    end
   end
-end
 ```
 
 #### Ask
@@ -209,11 +228,11 @@ The Ask helper has 3 actions, `question`, `boolean_question`, and
 and `url_question` validate the response. `question` does not.
 
 ```ruby
-class Greet < Playwright::CLI::Command
-  def call(**)
-    ask.boolean_question "What's your name?" #=> "What's your name? [yn]"
+  class Greet < Playwright::CLI::Command
+    def call(**)
+      ask.boolean_question "What's your name?" #=> "What's your name? [yn]"
+    end
   end
-end
 ```
 
 #### OS
@@ -222,12 +241,25 @@ The OS helper has 2 actions, `open_url` and `open_editor`. `open_url` takes a
 url and an optional name. `open_editor` takes a path and an optional name.
 
 ```ruby
-class Greet < Playwright::CLI::Command
-  def call(**)
-    os.open_url url: 'http://google.com', name: 'google'
-    os.open_editor path: Dir.pwd, name: 'working directory'
+  class Greet < Playwright::CLI::Command
+    def call(**)
+      os.open_url url: 'http://google.com', name: 'google'
+      os.open_editor path: Dir.pwd, name: 'working directory'
+    end
   end
-end
+```
+
+
+### Arguments & Options
+
+#### Validations
+
+You can add validations to your arguments and options by passing a proc or an
+array of procs to your argument or option declaration. The script will throw an
+error if the proc evaluates to false
+
+```
+ argument :url, validations: Proc.new { |url| URL_REGEX =~ url }
 ```
 
 ### Edit An App
@@ -238,7 +270,7 @@ editor to use when opening one of your playwright scripts.
 Use:
 
 ```shell
-$ echo $EDITOR
+  $ echo $EDITOR
 ```
 
 To see what playwright will default to. You can update this in your ~/.bashrc
@@ -249,7 +281,7 @@ In the future, I plan on allowing that to be a config you can set
 To edit an app:
 
 ```shell
-$ playwright edit my-script
+  $ playwright edit my-script
 ```
 
 `e` can be used instead of `edit`.
@@ -259,7 +291,7 @@ $ playwright edit my-script
 To see all Playwright apps, use:
 
 ```shell
-$ playwright list
+  $ playwright list
 ```
 
 `l`, `-l`, `--list` can be used instead of `list`.
@@ -269,7 +301,7 @@ $ playwright list
 Deleting a playwright app is simply:
 
 ```shell
-$ playwright destroy my-script
+  $ playwright destroy my-script
 ```
 
 `delete` or `d` can be used instead of `destroy`

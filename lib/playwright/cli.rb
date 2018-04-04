@@ -8,6 +8,8 @@ require 'os'
 require 'uri'
 require 'pathname'
 
+require_relative '../ext/hanami.rb'
+
 module Playwright
   class CLI < Hanami::CLI
     ROOT_PATH = Pathname.new(File.expand_path('../..', File.dirname(__FILE__)))

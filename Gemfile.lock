@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    playwright-cli (0.1.14)
+    playwright-cli (0.1.16)
       colorize (~> 0.1)
       git (~> 1.3)
       hanami-cli (~> 0.1)

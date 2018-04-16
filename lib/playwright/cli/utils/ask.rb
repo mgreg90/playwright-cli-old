@@ -19,8 +19,7 @@ module Playwright
 
           def boolean_question user_question
             response = question "#{user_question} [yn]"
-            sanitized_response = response.chomp.strip.downcase.to_sym if response && response.length > 0
-            boolean_response_map[response]
+            map_boolean_response response
           end
 
           def url_question user_question
@@ -39,8 +38,12 @@ module Playwright
 
           private
 
-          def boolean_response_map
-            { TRUE_RESPONSE => true, FALSE_RESPONSE => false }
+          def map_boolean_response value
+            { TRUE_RESPONSE => true, FALSE_RESPONSE => false }[sanitize_boolean_response value]
+          end
+
+          def sanitize_boolean_response value
+            value&.strip&.downcase&.to_sym
           end
 
         end

@@ -2,11 +2,14 @@ require 'hanami/cli'
 require 'colorize'
 require 'git'
 
-require 'fileutils'
 require 'erb'
+require 'fileutils'
 require 'os'
-require 'uri'
 require 'pathname'
+require 'uri'
+require 'yaml'
+
+require_relative '../ext/string'
 
 require_relative '../ext/hanami.rb'
 

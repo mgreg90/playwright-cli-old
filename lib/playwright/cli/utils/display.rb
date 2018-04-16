@@ -33,7 +33,7 @@ module Playwright
           def print msg, method: :puts, color: DEFAULT_COLOR, indent: false
             msg = stringify msg, indent: indent
             validate_print_method!(method)
-            msg = msg.send(color) if defined?(Colorize)
+            msg = msg.send(color) if defined?(Colorize) && msg
             send(method, msg)
           end
 
@@ -51,6 +51,8 @@ module Playwright
             when Array
               msg = msg.map { |ln| indentify(ln, count: indent) } if indent
               msg.join("\n")
+            else
+              msg.to_s
             end
           end
 

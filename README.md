@@ -106,7 +106,7 @@ as in the example below.
 Hanami::CLI is built for more intricate command line apps, so playwright allows
 you to generate that as well.
 ```shell
-  $ playwright g my-script --type=expanded
+  $ playwright g my-script --expanded
 ```
 This will give you a mostly similar main class:
 

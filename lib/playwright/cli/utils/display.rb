@@ -13,6 +13,7 @@ module Playwright
           InvalidPrintMethod = Class.new StandardError
 
           VALID_PRINT_METHODS = [:p, :puts, :print]
+          BORDER_CHARACTERS = "=-"
           DEFAULT_COLOR = :green
           WARNING_COLOR = :yellow
           ERROR_COLOR = :red
@@ -37,6 +38,10 @@ module Playwright
             send(method, msg)
           end
 
+          def border color: DEFAULT_COLOR, characters: BORDER_CHARACTERS
+            print characters * (term_width / characters.length), color: color
+          end
+
           private
 
           def validate_print_method!(method)
@@ -58,6 +63,13 @@ module Playwright
 
           def indentify msg, count: 0
             "#{"  " * count}#{msg}"
+          end
+
+          def term_width
+            return @term_width if defined? @term_width
+            tw = `tput cols`.to_i
+            @term_width = tw if tw != 0
+            @term_width || 50
           end
 
         end

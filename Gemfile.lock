@@ -1,10 +1,11 @@
 PATH
   remote: .
   specs:
-    playwright-cli (0.1.19)
+    playwright-cli (0.1.20)
       colorize (~> 0.1)
       git (~> 1.3)
       hanami-cli (~> 0.1)
+      httparty
       os (~> 1.0)
 
 GEM
@@ -14,15 +15,18 @@ GEM
     colorize (0.8.1)
     concurrent-ruby (1.0.5)
     diff-lcs (1.3)
-    git (1.3.0)
+    git (1.4.0)
     hanami-cli (0.2.0)
       concurrent-ruby (~> 1.0)
       hanami-utils (~> 1.2)
     hanami-utils (1.2.0)
       concurrent-ruby (~> 1.0)
       transproc (~> 1.0)
+    httparty (0.16.2)
+      multi_xml (>= 0.5.2)
     memfs (1.0.0)
     method_source (0.9.0)
+    multi_xml (0.6.0)
     os (1.0.0)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -60,4 +64,4 @@ DEPENDENCIES
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

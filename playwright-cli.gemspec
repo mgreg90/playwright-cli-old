@@ -41,4 +41,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "colorize",     "~> 0.1"
   spec.add_runtime_dependency "os",           "~> 1.0"
   spec.add_runtime_dependency "git",          "~> 1.3"
+  spec.add_runtime_dependency "httparty"
 end
